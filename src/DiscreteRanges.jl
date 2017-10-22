@@ -26,7 +26,7 @@ isdiscrete(::Type{<:Integer}) = true
 isdiscrete(::Type{Date}) = true
 
 discrete_gap(x::Integer, y::Integer) = x - y
-discrete_gap(x::Date, y::Date) = Dates.days(y - x)
+discrete_gap(x::Date, y::Date) = Dates.days(x - y)
 
 discrete_next(x) = discrete_next(x, 1)
 discrete_next(x::T, Δ) where {T <: Integer} = x + T(Δ)
