@@ -19,9 +19,9 @@ Real`, and extended easily (see below). Iteration, indexing and array
 interfaces are supported, and so are basic set operations (`∪`, `∩`,
 `⊆`, `∈`, etc).
 
-## Comparison and conflict with IntervalSets.jl
+## Comparison and conflict with `IntervalSets.jl`
 
-[IntervalSets.jl](https://github.com/JuliaMath/IntervalSets.jl) is a similar library serving a different purpose. Both export `..`, you can avoid conflicts by importing only `DiscreteRange` and optionally using another infix operator:
+[`IntervalSets.jl`](https://github.com/JuliaMath/IntervalSets.jl) is a similar library serving a different purpose. Both export `..`, you can avoid conflicts by importing only `DiscreteRange` and optionally using another infix operator:
 
 ```julia
 using DiscreteRanges: DiscreteRange
@@ -41,7 +41,7 @@ The following table summarizes the differences:
 | `3.0 ∈ 1..3` | `true` | `true` |
 | `3.1 ∈ 1..3` | throws `InexactError` | `true` |
 | `1.0..3.0` | throws `ArgumentError` | valid |
-| `length(1..3)` | `3` | `3` (this may change) |
+| `length(1..3)` | `3` | `3` **(this may change)** |
 | `width(1..3)` | throws `MethorError` | `2` |
 | `(1..2) ∈ (0..10)` | throws `MethorError` | `true` |
 
