@@ -6,7 +6,7 @@ import Base:
     show, isequal, ==, hash, convert,
     in, isempty, issubset, union, intersect,
     minimum, maximum, extrema,
-    length, size, IndexStyle, getindex
+    length, size, IndexStyle, getindex, start, next, done, iteratorsize, iteratoreltype
 
 export DiscreteRange, ..
 
@@ -107,8 +107,14 @@ function getindex(D::DiscreteRange, i)
 end
 
 start(D::DiscreteRange) = D.left
+
 next(D::DiscreteRange, state) = state, discrete_next(state)
+
 done(D::DiscreteRange, state) = state > D.right
+
+iteratorsize(::Type{DiscreteRange{T}}) where T = Base.HasLength()
+
+iteratoreltype(::Type{DiscreteRange{T}}) where T = Base.HasEltype()
 
 convert(::Type{R}, D::DiscreteRange) where {R <: StepRange} =
     R(D.left, discrete_next(D.left) - D.left, D.right)

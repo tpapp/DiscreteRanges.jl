@@ -83,3 +83,18 @@ end
     @test (Int32(2)..Int32(3)) ⊆ A
     @test_throws ArgumentError DiscreteRange(3.0, 4.0)
 end
+
+@testset "hashing" begin
+    d1 = 1..2
+    d2 = 1..2
+    @test hash(d1) == hash(d2)
+end
+
+@testset "iteration" begin
+    itr = 3..7
+    @test [i^2 for i in itr] == [9, 16, 25, 36, 49]
+    @test Base.iteratorsize(typeof(itr)) == Base.HasLength()
+    @test Base.iteratoreltype(typeof(itr)) == Base.HasEltype()
+    @test eltype(itr) == Int
+    @test length(itr) == 5
+end
