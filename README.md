@@ -40,7 +40,8 @@ The following table summarizes the differences:
 | `3 ∈ 1..3` | `true` | `true` |
 | `3.0 ∈ 1..3` | `true` | `true` |
 | `3.1 ∈ 1..3` | throws `InexactError` | `true` |
-| `1.0..3.0` | throws `ArgumentError` | valid |
+| `1.0..3.0` | throws `ArgumentError` (non-discrete type) | valid |
+| `(1..2) ∪ (3..4)` | `1..4` | throws `ArgumentError` (disjoint) |
 | `length(1..3)` | `3` | `3` **(this may change)** |
 | `width(1..3)` | throws `MethorError` | `2` |
 | `(1..2) ∈ (0..10)` | throws `MethorError` | `true` |
