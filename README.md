@@ -39,11 +39,11 @@ The following table summarizes the differences:
 |---|---|---|
 | `3 ∈ 1..3` | `true` | `true` |
 | `3.0 ∈ 1..3` | `true` | `true` |
-| `3.1 ∈ 1..3` | `InexactError` | `true` |
-| `1.0..3.0` | `ArgumentError` | valid |
+| `3.1 ∈ 1..3` | throws `InexactError` | `true` |
+| `1.0..3.0` | throws `ArgumentError` | valid |
 | `length(1..3)` | `3` | `3` (this may change) |
-| `width(1..3)` | `MethorError` | `2` |
-| `(1..2) ∈ (0..10)` | `MethorError` | `true` |
+| `width(1..3)` | throws `MethorError` | `2` |
+| `(1..2) ∈ (0..10)` | throws `MethorError` | `true` |
 
 ## Extending for custom types
 
