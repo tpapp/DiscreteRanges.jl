@@ -97,4 +97,40 @@ end
     @test Base.iteratoreltype(typeof(itr)) == Base.HasEltype()
     @test eltype(itr) == Int
     @test length(itr) == 5
+    d1 = Date(1980,1,1)
+    d2 = Date(1980,4,1)
+    A = d1..d2
+    @test [i for i in A] == collect(convert(StepRange, A))
+    @test Base.iteratorsize(typeof(A)) == Base.HasLength()
+    @test Base.iteratoreltype(typeof(A)) == Base.HasEltype()
+    @test eltype(A) == Date
+    @test length(A) == Dates.days(d2 - d1) + 1
+end
+
+######################################################################
+# example: custom type
+######################################################################
+
+struct WrapInt{T <: Integer}
+    i::T
+end
+
+DiscreteRanges.isdiscrete(::Type{<:WrapInt}) = true
+DiscreteRanges.discrete_gap(x::WrapInt, y::WrapInt) = x.i - y.i
+DiscreteRanges.discrete_next(x::WrapInt, Δ) = WrapInt(x.i + Δ)
+Base.isless(x::WrapInt, y::WrapInt) = isless(x.i, y.i)
+Base.:(==)(x::WrapInt, y::WrapInt) = x.i == y.i
+
+@testset "custom type" begin
+    A = WrapInt(1)..WrapInt(7)
+    @test WrapInt(5) ∈ A
+    @test WrapInt(-3) ∉ A
+    @test (WrapInt(2)..WrapInt(3)) ⊆ A
+    @test !((WrapInt(-11)..WrapInt(3)) ⊆ A)
+    @test length(A) == 7
+    @test A[3] == WrapInt(3)
+    @test [i for i in A] == [WrapInt(i) for i in 1:7]
+    for i in A
+        println(i)
+    end
 end

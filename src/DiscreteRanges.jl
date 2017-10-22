@@ -19,6 +19,8 @@ struct DiscreteRange{T} <: AbstractVector{T}
     end
 end
 
+convert(::Type{DiscreteRange{T}}, D::DiscreteRange{T}) where T = D
+
 convert(::Type{DiscreteRange{T}}, D::DiscreteRange) where T =
     DiscreteRange(T(D.left), T(D.right))
 
