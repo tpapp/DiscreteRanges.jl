@@ -14,7 +14,7 @@ using Base.Test
     @test extrema(A) == (1,5)
     @test A ∩ (2..7) == 2..5
     @test A ∪ (6..10) == 1..10
-    @test_throws ArgumentError A ∪ (c7..10)
+    @test_throws ArgumentError A ∪ (7..10)
     @test length(A) == 5
     @test collect(A) == collect(1:5)
     @test eltype(A) == Int
