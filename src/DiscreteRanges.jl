@@ -47,9 +47,9 @@ end
 show(io::IO, ::MIME"text/plain", D::DiscreteRange) =
     show(io, D) # fallback to prevent AbstractArray printing
 
-in(x, D::DiscreteRange) = D.left ≤ x ≤ D.right
+in(x::T, D::DiscreteRange{T}) where T = D.left ≤ x ≤ D.right
 
-in(A::DiscreteRange, B::DiscreteRange) = (B.left ≤ A.left) & (A.right ≥ B.right)
+in(x, D::DiscreteRange{T}) where T = T(x) ∈ D
 
 isequal(A::DiscreteRange, B::DiscreteRange) =
     (isequal(A.left, B.left) & isequal(A.right, B.right)) | (isempty(A) & isempty(B))

@@ -1,6 +1,12 @@
 using DiscreteRanges
 using Base.Test
 
+@testset "general" begin
+    @test !DiscreteRanges.isdiscrete(Float64)
+    @test DiscreteRanges.isdiscrete(Int)
+    @test DiscreteRanges.isdiscrete(Date)
+end
+
 @testset "discrete range Int" begin
     A = 1..5
     @test A == DiscreteRange(1, 5)
@@ -15,11 +21,18 @@ using Base.Test
     @test extrema(A) == (1,5)
     @test A ∩ (2..7) == 2..5
     @test A ∪ (6..10) == 1..10
+    @test (2..3) ⊆ A
     @test_throws ArgumentError A ∪ (7..10)
     @test length(A) == 5
     @test collect(A) == collect(1:5)
     @test eltype(A) == Int
     @test convert(StepRange, A) == 1:1:5
+    B = DiscreteRange(3)
+    @test length(B) == 1
+    @test B ⊆ A
+    C = DiscreteRange(-7)
+    @test !(C ⊆ A)
+    @test isempty(C ∩ A)
 end
 
 @testset "discrete range Date" begin
@@ -48,4 +61,10 @@ end
     @test collect(A) == collect(d1:d2)
     @test eltype(A) == Date
     @test convert(StepRange, A) == d1:Dates.Day(1):d2
+    B = DiscreteRange(Date(1980, 5, 7))
+    @test length(B) = 1
+    @test B ⊆ A
+    C = DiscreteRange(Date(1960, 1, 1))
+    @test !(C ⊆ A)
+    @test isempty(C ∩ A)
 end
