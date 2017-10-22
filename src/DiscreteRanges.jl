@@ -19,6 +19,9 @@ struct DiscreteRange{T} <: AbstractVector{T}
     end
 end
 
+convert(::Type{DiscreteRange{T}}, D::DiscreteRange) where T =
+    DiscreteRange(T(D.left), T(D.right))
+
 ..(left, right) = DiscreteRange(left, right)
 
 isdiscrete(::Type) = false
@@ -36,9 +39,9 @@ DiscreteRange(x) = DiscreteRange(x, x) # single value
 
 isempty(D::DiscreteRange) = D.left > D.right
 
-function show(io::IO, D::DiscreteRange)
+function show(io::IO, D::DiscreteRange{T}) where T
     if isempty(D)
-        print(io, "empty $(typeof(D))")
+        print(io, "empty DiscreteRange{$(T)}")
     else
         print(io, D.left, "..", D.right)
     end
@@ -85,8 +88,10 @@ function union(A::DiscreteRange, B::DiscreteRange)
     DiscreteRange(min(A.left, B.left), max(A.right, B.right))
 end
 
-issubset(A::DiscreteRange, B::DiscreteRange) =
+issubset(A::DiscreteRange{T}, B::DiscreteRange{T}) where {T} =
     isempty(A) || (B.left ≤ A.left ≤ A.right ≤ B.right)
+
+issubset(A::DiscreteRange, B::DiscreteRange) = issubset(oftype(B, A), B)
 
 length(D::DiscreteRange) = isempty(D) ? 0 : Int(discrete_gap(D.right, D.left)) + 1
 

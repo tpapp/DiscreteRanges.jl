@@ -9,6 +9,7 @@ end
 
 @testset "discrete range Int" begin
     A = 1..5
+    @test repr(A) == "1..5"
     @test A == DiscreteRange(1, 5)
     @test isequal(A, DiscreteRange(1, 5))
     @test A ≠ 3..7
@@ -33,12 +34,16 @@ end
     C = DiscreteRange(-7)
     @test !(C ⊆ A)
     @test isempty(C ∩ A)
+    E = DiscreteRange(3,-3)     # empty
+    @test isempty(E)
+    @test repr(E) == "empty DiscreteRange{Int64}"
 end
 
 @testset "discrete range Date" begin
     d1 = Date(1980,1,1)
     d2 = Date(1980,12,31)
     A = d1..d2
+    @test repr(A) == "1980-01-01..1980-12-31"
     A2 = DiscreteRange(d1, d2)
     @test A == A2
     @test isequal(A, A2)
@@ -62,9 +67,19 @@ end
     @test eltype(A) == Date
     @test convert(StepRange, A) == d1:Dates.Day(1):d2
     B = DiscreteRange(Date(1980, 5, 7))
-    @test length(B) = 1
+    @test length(B) == 1
     @test B ⊆ A
     C = DiscreteRange(Date(1960, 1, 1))
     @test !(C ⊆ A)
     @test isempty(C ∩ A)
+    @test repr(C ∩ A) == "empty DiscreteRange{Date}"
+end
+
+@testset "promotions" begin
+    A = 1..10
+    @test Int32(3) ∈ A
+    @test 3.0 ∈ A
+    @test_throws InexactError 3.1 ∈ A
+    @test (Int32(2)..Int32(3)) ⊆ A
+    @test_throws ArgumentError DiscreteRange(3.0, 4.0)
 end
