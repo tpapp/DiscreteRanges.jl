@@ -10,6 +10,24 @@ import Base:
 
 export DiscreteRange, ..
 
+"""
+    DiscreteRange(left::T, right::T) where T
+    DiscreteRange(singleton)
+
+An object representing all values `x::T` such that `left ≤ x ≤ right`. Supports
+`∈`, `⊆`, indexing, iteration, and (immutable) array interfaces. For integers,
+it is equivalent to `UnitRange{T}`. With a single argument, `left == right`.
+
+## Definition for custom types
+
+The package defines methods for `<: Integer` and `Date`. To extend this, define
+the following: [`isdiscrete`](@ref), [`discrete_gap`](@ref),
+[`discrete_next`](@ref), [`Base.isless`](@ref).
+
+The methods for [`Base.==`](@ref), [`Base.isequal`](@ref) and
+[`Base.hash`](@ref) only work for `DiscreteRange{T}` when they are defined for
+`T`. The unit tests of the
+"""
 struct DiscreteRange{T} <: AbstractVector{T}
     left::T
     right::T
@@ -26,13 +44,34 @@ convert(::Type{DiscreteRange{T}}, D::DiscreteRange) where T =
 
 ..(left, right) = DiscreteRange(left, right)
 
+"""
+    isdiscrete(T)
+
+Creation of `DiscreteRange{T}` objects is only allowed when this returns `true`.
+
+Needs to be defined for valid `DiscreteRange` type parameters.
+"""
 isdiscrete(::Type) = false
 isdiscrete(::Type{<:Integer}) = true
 isdiscrete(::Type{Date}) = true
 
+"""
+    discrete_gap(x::T, y::T)
+
+Return the difference `y - x` as an *integer*.
+
+Needs to be defined for valid `DiscreteRange` type parameters.
+"""
 discrete_gap(x::Integer, y::Integer) = x - y
 discrete_gap(x::Date, y::Date) = Dates.days(x - y)
 
+"""
+    discrete_next(x::T, Δ::Integer)
+
+Return `y::T` such that `discrete_gap(y, x) == Δ`.
+
+Needs to be defined for valid `DiscreteRange` type parameters.
+"""
 discrete_next(x) = discrete_next(x, 1)
 discrete_next(x::T, Δ) where {T <: Integer} = x + T(Δ)
 discrete_next(x::Date, Δ) = x + Dates.Day(Δ)
