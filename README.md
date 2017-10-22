@@ -38,7 +38,7 @@ The following table summarizes the differences:
 |   | `DiscreteRange` | `IntervalSets.ClosedInterval` |
 |---|---|---|
 | `3 ∈ 1..3` | `true` | `true` |
-| `3.0 ∈ 1..3` | `true` | `true` |
+| `3.0 ∈ 1..3` | `true` (converted first) | `true` (compared as is) |
 | `3.1 ∈ 1..3` | throws `InexactError` | `true` |
 | `1.0..3.0` | throws `ArgumentError` (non-discrete type) | valid |
 | `(1..2) ∪ (3..4)` | `1..4` | throws `ArgumentError` (disjoint) |
