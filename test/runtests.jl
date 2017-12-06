@@ -1,5 +1,7 @@
 using DiscreteRanges
-using Base.Test
+
+import Compat                   # for v0.6
+using Compat.Test
 
 @testset "general" begin
     @test !DiscreteRanges.isdiscrete(Float64)

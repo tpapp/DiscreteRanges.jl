@@ -2,7 +2,8 @@ __precompile__()
 module DiscreteRanges
 
 using ArgCheck
-import Compat
+
+import Compat                   # for 0.6
 using Compat.Dates
 
 import Base:
