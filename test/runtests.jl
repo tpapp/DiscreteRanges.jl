@@ -1,6 +1,7 @@
 using DiscreteRanges
 
 import Compat                   # for v0.6
+using Compat.Dates
 using Compat.Test
 
 @testset "general" begin
