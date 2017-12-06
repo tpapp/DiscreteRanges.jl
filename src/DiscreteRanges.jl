@@ -3,7 +3,7 @@ module DiscreteRanges
 
 using ArgCheck
 import Compat
-import Compat.Dates
+using Compat.Dates
 
 import Base:
     show, isequal, ==, hash, convert,
