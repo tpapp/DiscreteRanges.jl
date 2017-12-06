@@ -10,7 +10,8 @@ import Base:
     show, isequal, ==, hash, convert,
     in, isempty, issubset, union, intersect,
     minimum, maximum, extrema,
-    length, size, IndexStyle, getindex, start, next, done, iteratorsize, iteratoreltype
+    length, size, IndexStyle, getindex, start, next, done, iteratorsize,
+    iteratoreltype
 
 export DiscreteRange, ..
 
