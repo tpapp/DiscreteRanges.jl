@@ -1,17 +1,15 @@
 __precompile__()
 module DiscreteRanges
 
-using ArgCheck
-
-import Compat                   # for 0.6
-using Compat.Dates
+using ArgCheck: @argcheck
+using Dates: Date, days, Day
 
 import Base:
     show, isequal, ==, hash, convert,
     in, isempty, issubset, union, intersect,
     minimum, maximum, extrema,
-    length, size, IndexStyle, getindex, start, next, done, iteratorsize,
-    iteratoreltype
+    length, size, IndexStyle, getindex, start, next, done, IteratorSize,
+    IteratorEltype
 
 export DiscreteRange, ..
 
@@ -68,7 +66,7 @@ Return the difference `y - x` as an *integer*.
 Needs to be defined for valid `DiscreteRange` type parameters.
 """
 discrete_gap(x::Integer, y::Integer) = x - y
-discrete_gap(x::Date, y::Date) = Dates.days(x - y)
+discrete_gap(x::Date, y::Date) = days(x - y)
 
 """
     discrete_next(x::T, Δ::Integer)
@@ -79,7 +77,7 @@ Needs to be defined for valid `DiscreteRange` type parameters.
 """
 discrete_next(x) = discrete_next(x, 1)
 discrete_next(x::T, Δ) where {T <: Integer} = x + T(Δ)
-discrete_next(x::Date, Δ) = x + Dates.Day(Δ)
+discrete_next(x::Date, Δ) = x + Day(Δ)
 
 DiscreteRange(x) = DiscreteRange(x, x) # single value
 
@@ -158,9 +156,9 @@ next(D::DiscreteRange, state) = state, discrete_next(state)
 
 done(D::DiscreteRange, state) = state > D.right
 
-iteratorsize(::Type{DiscreteRange{T}}) where T = Base.HasLength()
+IteratorSize(::Type{DiscreteRange{T}}) where T = Base.HasLength()
 
-iteratoreltype(::Type{DiscreteRange{T}}) where T = Base.HasEltype()
+IteratorEltype(::Type{DiscreteRange{T}}) where T = Base.HasEltype()
 
 convert(::Type{R}, D::DiscreteRange) where {R <: StepRange} =
     R(D.left, discrete_next(D.left) - D.left, D.right)

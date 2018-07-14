@@ -1,8 +1,7 @@
 using DiscreteRanges
 
-import Compat                   # for v0.6
-using Compat.Dates
-using Compat.Test
+using Dates: Date, Day, days
+using Test
 
 @testset "general" begin
     @test !DiscreteRanges.isdiscrete(Float64)
@@ -64,11 +63,11 @@ end
     @test A ∩ (d3..d4) == d3..d2
     @test A ∪ (d3..d4) == d1..d4
     @test A ∪ (d5..d4) == d1..d4
-    @test_throws ArgumentError A ∪ (d4..(d4+Dates.Day(5)))
+    @test_throws ArgumentError A ∪ (d4..(d4 + Day(5)))
     @test length(A) == 366                                 # 1980 is a leap year
-    @test collect(A) == collect(d1:d2)
+    @test collect(A) == collect(d1:Day(1):d2)
     @test eltype(A) == Date
-    @test convert(StepRange, A) == d1:Dates.Day(1):d2
+    @test convert(StepRange, A) == d1:Day(1):d2
     B = DiscreteRange(Date(1980, 5, 7))
     @test length(B) == 1
     @test B ⊆ A
@@ -96,18 +95,18 @@ end
 @testset "iteration" begin
     itr = 3..7
     @test [i^2 for i in itr] == [9, 16, 25, 36, 49]
-    @test Base.iteratorsize(typeof(itr)) == Base.HasLength()
-    @test Base.iteratoreltype(typeof(itr)) == Base.HasEltype()
+    @test Base.IteratorSize(typeof(itr)) == Base.HasLength()
+    @test Base.IteratorEltype(typeof(itr)) == Base.HasEltype()
     @test eltype(itr) == Int
     @test length(itr) == 5
     d1 = Date(1980,1,1)
     d2 = Date(1980,4,1)
     A = d1..d2
     @test [i for i in A] == collect(convert(StepRange, A))
-    @test Base.iteratorsize(typeof(A)) == Base.HasLength()
-    @test Base.iteratoreltype(typeof(A)) == Base.HasEltype()
+    @test Base.IteratorSize(typeof(A)) == Base.HasLength()
+    @test Base.IteratorEltype(typeof(A)) == Base.HasEltype()
     @test eltype(A) == Date
-    @test length(A) == Dates.days(d2 - d1) + 1
+    @test length(A) == days(d2 - d1) + 1
 end
 
 ######################################################################
